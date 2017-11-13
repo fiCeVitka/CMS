@@ -1,0 +1,26 @@
+AddDefaultCharset UTF-8
+RewriteEngine On
+RewriteBase /
+
+RewriteCond     %{SCRIPT_FILENAME}  !-f
+    RewriteCond $1 !^(index\.php|robots\.txt|img|css|js)
+    RewriteRule		^(.+) index.php [L]
+	
+<ifModule mod_headers.c>
+	#кэшировать html и htm файлы на один день
+	<FilesMatch "\.(html|htm)$">
+		Header unset Cache-Control
+	</FilesMatch>
+	#кэшировать css, javascript и текстовые файлы на одну неделю
+	<FilesMatch "\.(js|css|txt)$">
+		Header unset Cache-Control
+	</FilesMatch>
+	#кэшировать флэш и изображения на месяц
+	<FilesMatch "\.(flv|swf|ico|gif|jpg|jpeg|png)$">
+		Header unset Cache-Control
+	</FilesMatch>
+	#отключить кэширование
+	<FilesMatch "\.(pl|php|cgi|spl|scgi|fcgi)$">
+		Header unset Cache-Control
+	</FilesMatch>
+</IfModule>
