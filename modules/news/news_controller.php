@@ -1,6 +1,8 @@
 <?php
 
-Class NewsController extends Controller
+namespace modules\news;
+
+Class NewsController extends \Core\Controller
 {
     public function _construct ()
     {
@@ -9,13 +11,12 @@ Class NewsController extends Controller
 
     public function index()
     {
-        //echo "индекс";
+        $model = $this->getmodel('News');
         $view = $this->getview('News');
-        //$view::generate('lel','template');
-        $title = 'Индекс';
-        $vars = array('title' => $title,);
-        echo $view->generate('lel','template',$vars);
+        $res = $model->getpagenews(null,1,News_Count);
+        $view->preview($res,1,$model);
     }
+
 
     public function view($params)
     {
@@ -38,8 +39,8 @@ Class NewsController extends Controller
             //Показ новостей на определенной странице (НЕ СДЕЛАНО)
 
             //$res = $model::getnewsid($uri[1]);
-            $res = $model::getpagenews(null,$uri[1],News_Count);
-            $view->preview($res,$uri[1],$model);
+            $res = $model->getpagenews(null,$uri[1],News_Count);
+            $view->preview($res,$uri[1],$model,null);
             //$vars = array('title' => $res['name'],);
             //echo $view->generate('lel','template',$vars);
 
@@ -59,16 +60,16 @@ Class NewsController extends Controller
                         //Показ новостей на определенной страницы категории (НЕ СДЕЛАНО)
                         if ( empty($uri[2]) ) $uri[2]='1';
                         if ( !ctype_digit($uri[2]) ) Core::redirect('/404');
-                        $res = $model::getpagenews($cat_id,$uri[2],News_Count);
-                        $view->preview($res,$uri[2],$model);
+                        $res = $model->getpagenews($cat_id,$uri[2],News_Count);
+                        $view->preview($res,$uri[2],$model,$uri[0]);
                     }
                     else
                     {
                         //Показ новости
-                        $res = $model::getnews($uri[1]);
+                        $res = $model->getnews($uri[1]);
 
                         $other['link'] = BASE_URL.'news/'.$uri[0].'/'.$uri[1];
-                        $cat = $model::namecat($uri[0]);
+                        $cat = $model->namecat($uri[0]);
                         $other['cat_name'] = $cat['cat_name'];
                         $other['cat_link'] = BASE_URL.'news/'.$uri[0].'/';
                         $view->full($res,$other);
@@ -76,11 +77,10 @@ Class NewsController extends Controller
                     }
                 }
                 else { Core::redirect('/404'); }
-            }
-            else
+            } else
             {
                 //Показ новости
-                $res = $model::getnews($uri[0]);
+                $res = $model->getnews($uri[0]);
                 $other['link'] = BASE_URL.'news/'.$uri[0];
 
                 $view->full($res,$other);

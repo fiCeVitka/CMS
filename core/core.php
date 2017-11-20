@@ -1,8 +1,11 @@
 <?php
 
+namespace core;
+
 Class Core
 {
-    public function redirect($url)
+
+    public static function redirect($url)
     {
         if($url[0] == '/')
             $url = BASE_URL . substr($url, 1);

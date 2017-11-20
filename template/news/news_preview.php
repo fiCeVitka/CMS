@@ -1,6 +1,6 @@
-<h2><?=$title?></h2>
+<h2><a href="<?=$link?>"><?=$title?></a></h2>
 <?=$description?><br>
-<?=$link?><br>
+<br>
 <?=$cat_id?><br> - id категории
 <?=$id?><br>
 

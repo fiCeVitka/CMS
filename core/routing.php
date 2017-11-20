@@ -1,5 +1,7 @@
 <?php
 
+namespace core;
+
 Class Router
 {
     private $controller;
@@ -70,7 +72,7 @@ Class Router
         $GLOBALS['controller'] = $this->controller;
         require_once (ROOT."/modules/".$this->controller."/".$this->controller."_controller.php");
         require_once (ROOT."/modules/".$this->controller."/".$this->controller."_settings.php");
-        $controllernames = ucfirst($this->controller.'Controller');
+        $controllernames = ucfirst("\\modules\\".$this->controller."\\".$this->controller.'Controller');
         $controllerobject = new $controllernames;
         $controlleraction = $this->action;
         //echo $params;

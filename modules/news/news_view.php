@@ -1,6 +1,11 @@
 <?php
 
-Class NewsView extends View
+namespace modules\news;
+
+use \PDO;
+use \plugins\auth\Auth as Auth;
+
+Class NewsView extends \core\View
 {
 
     public function full($data,$other=array())
@@ -19,10 +24,11 @@ Class NewsView extends View
 
         $this->vars('content',$this->generate('','news/news_full'));
         echo $this->generate('','template');
+        print_r(Auth::getInstance()->isAuth());
 
     }
 
-    public function preview($data,$page,$model)
+    public function preview($data,$page,&$model,$cat=null)
     {
         $max_count = $data[1];
         $res = $data[0];
@@ -48,11 +54,23 @@ Class NewsView extends View
             $this->clear();
         }
 
+        $totalItems = $max_count;
+        $itemsPerPage = News_Count;
+        $currentPage = $page;
+        if ( empty($cat) ) $urlPattern = '/news/page/(:num)'; else $urlPattern = '/news/'.$cat.'/page/(:num)';
+        $paginator = new \core\Paginator($totalItems, $itemsPerPage, $currentPage, $urlPattern);
+
+        $this->vars('paginator',$paginator);
         $this->vars('title','Страница '.$page.' - Новости сайта - '.SITENAME);
         $this->vars('content',$string);
         echo $this->generate('','template');
-    }
 
+
+
+
+
+
+    }
 
 
 }

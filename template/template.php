@@ -23,6 +23,7 @@
         <?//View::get_Sidebar()?>
         <section>
             <?=$content?>
+            <?=$paginator?>
         </section>
     </div>
 </div>

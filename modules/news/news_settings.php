@@ -1,7 +1,7 @@
 <?php
 
 //Количество новостей на странице
-define("News_Count",1);
+define("News_Count",5);
 //Есть ли категории у новостей или нет
 define("News_Cat",true);
 

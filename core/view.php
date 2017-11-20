@@ -1,5 +1,7 @@
 <?php
 
+namespace core;
+
 abstract Class View
 {
     protected $vars=array();
@@ -13,6 +15,7 @@ abstract Class View
         $this->vars[$varname] = $value;
         return true;
     }
+
 
     public function clear()
     {

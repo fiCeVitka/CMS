@@ -1,5 +1,7 @@
 <?php
 
+namespace core;
+use \PDO;
 //Пример запроса
 /*$Mysql = new Mysql();
 $res = $Mysql->select('users',"`login` = 'fiCeVitka'");
@@ -7,9 +9,10 @@ echo $res['login'];*/
 
 Class Mysql
 {
-    private $DB;
+    protected static $DB;
+    private static $queries=0;
 
-    public function __construct()
+    private function __construct()
     {
         /*$db = new mysqli(DBHOST, DBLOGIN, DBPASSWORD, DBNAME);
         if ($db->connect_errno) {
@@ -33,10 +36,17 @@ Class Mysql
         $this->DB = $pdo;
     }
 
-    public function __destruct()
+    private function __clone () {}
+    private function __wakeup () {}
+
+    public static function getInstance()
     {
-        $this->DB = null;
+        if (self::$DB != null) {
+            return self::$DB;
+        }
+        return new self;
     }
+
 
     public function select($table,$query=null,$what=null)
     {
@@ -45,8 +55,9 @@ Class Mysql
         /*$res = $this->DB->query("SELECT * FROM `".$table."` WHERE ".$query);
         $row = $res->fetch_assoc();
         return $row;*/
+        //echo 'SELECT '.$what.' FROM '.$table.' '.$query.'<br>';
         $STH = $this->DB->query('SELECT '.$what.' FROM '.$table.' '.$query);
-
+        self::$queries++;
         //$STH->setFetchMode(PDO::FETCH_ASSOC);
         return $STH;
     }

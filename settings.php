@@ -2,7 +2,7 @@
 
 define('DBHOST', 'localhost');
 define('DBLOGIN', 'root');
-define('DBPASSWORD', '');
+define('DBPASSWORD', '199855');
 define('DBNAME', 'cms');
 
 define('Dev_Error',true);

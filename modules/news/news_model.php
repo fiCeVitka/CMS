@@ -1,6 +1,11 @@
 <?php
 
-Class NewsModel extends Model
+namespace modules\news;
+
+use \core\Mysql as Mysql;
+use \PDO;
+
+Class NewsModel extends \core\Model
 {
 
     function __construct()
@@ -11,7 +16,7 @@ Class NewsModel extends Model
     //Получение данных одной новости по id
     public function getnewsid($id)
     {
-        $Mysql = new Mysql();
+        $Mysql = Mysql::getInstance();
         $res = $Mysql->select('news',"WHERE id = '$id'");
         $row = $res->fetch(PDO::FETCH_LAZY);
         unset($Mysql);
@@ -26,7 +31,7 @@ Class NewsModel extends Model
     //Получение данных одной новости по ссылке
     public function getnews($link)
     {
-        $Mysql = new Mysql();
+        $Mysql = Mysql::getInstance();
         $res = $Mysql->select('news',"WHERE link = '$link'",null);
         $row = $res->fetch(PDO::FETCH_LAZY);
         unset($Mysql);
@@ -41,7 +46,7 @@ Class NewsModel extends Model
     //Проверка существует ли категория, если да, то возвращает ее id
     public function checkcat($name)
     {
-        $Mysql = new Mysql();
+        $Mysql = Mysql::getInstance();
         $res = $Mysql->select('news_cat',"WHERE cat_link = '$name'",null);
         $row = $res->fetch(PDO::FETCH_LAZY);
         unset($Mysql);
@@ -50,7 +55,7 @@ Class NewsModel extends Model
     //Получение имени и ссылки категории
     public function namecat($catid)
     {
-        $Mysql = new Mysql();
+        $Mysql = Mysql::getInstance();
         $res = $Mysql->select('news_cat',"WHERE id = '$catid'",null);
         $row = $res->fetch(PDO::FETCH_LAZY);
         unset($Mysql);
@@ -59,14 +64,14 @@ Class NewsModel extends Model
 
     public function getlistnews($id,$cat,$count)
     {
-        $Mysql = new Mysql();
+        $Mysql = Mysql::getInstance();
         $order = (News_Order) ? 'ASC' : 'ASC';
         if ( empty($cat) ):
-            $res = $Mysql->select('news',"Order by id.". $order ."LIMIT $id,$count",null);
+            $res = $Mysql->select('news',"Order by id ". $order ." LIMIT $id,$count",null);
         else :
             $res = $Mysql->select('news',"WHERE cat_id ='$cat' Order by id ". $order ." LIMIT $id,$count",null);
-        endif;
 
+        endif;
         //$row = $res->fetch(PDO::FETCH_LAZY);
         //$count = $row['id'];
         unset($Mysql);
@@ -75,7 +80,7 @@ Class NewsModel extends Model
 
     public function getpagenews($cat,$page,$count)
     {
-        $Mysql = new Mysql();
+        $Mysql = Mysql::getInstance();
 
         if ( empty($cat) ):
             $res = $Mysql->select('news',null,'COUNT(*)');
@@ -86,14 +91,15 @@ Class NewsModel extends Model
         $max_count = $row['COUNT(*)'];
 
         //echo $max_count;
-
-        $model = $this->getmodel('News');
+        //$this->getlistnews()
+        //$model = $this->getmodel('News');
         if ( $max_count<$count ):
-            $list = $model::getlistnews(0,$cat,$count);
+            $list = self::getlistnews(0,$cat,$count);
         else :
-            $list = $model::getlistnews(($page-1)*$count, $cat, $count);
+            if ($max_count-($page)*$count<0) {Core::redirect('/404');}
+            $list = self::getlistnews($max_count-($page)*$count, $cat, $count);
         endif;
-        unset($model);
+        //unset($model);
         unset($Mysql);
         return array($list,$max_count);
     }
