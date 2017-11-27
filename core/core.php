@@ -4,6 +4,15 @@ namespace core;
 
 Class Core
 {
+    use traits\Singleton;
+
+    public $ready=false;
+
+
+    public function getready()
+    {
+        return $this->ready;
+    }
 
     public static function redirect($url)
     {

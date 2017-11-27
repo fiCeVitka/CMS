@@ -5,17 +5,11 @@ namespace plugins\auth;
 
 class Session
 {
-    protected static $instance;
+    use \core\traits\Singleton;
+
     private $session_start = FALSE;
 
-    private function __construct() {}
-
-    public static function getInstance()
-    {
-        return (null !== self::$instance) ? self::$instance : (self::$instance = new Session());
-    }
-
-    public function start()
+    private function __construct()
     {
         if($this->session_start){
             return true;
@@ -23,8 +17,15 @@ class Session
         /*if(!session_start()){
             throw new Exception('Error session start');
         }*/
+        session_start();
         $this->session_start = true;
         return true;
+    }
+
+
+    public function start()
+    {
+
     }
 
     public function destroy()
@@ -33,16 +34,14 @@ class Session
         session_destroy();
     }
 
-    public function getSession($key)
+    public function getvalue($key)
     {
-        $this->start();
         return (!empty($_SESSION[$key])) ? $_SESSION[$key] : false;
     }
 
 
-    public function setSession($key, $value)
+    public function setvalue($key, $value)
     {
-        $this->start();
         $_SESSION[$key] = $value;
     }
 }

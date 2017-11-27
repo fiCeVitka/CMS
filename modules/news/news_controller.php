@@ -2,6 +2,9 @@
 
 namespace modules\news;
 
+use core\Ajax;
+use core\Core;
+
 Class NewsController extends \Core\Controller
 {
     public function _construct ()
@@ -100,9 +103,16 @@ Class NewsController extends \Core\Controller
 
     }
 
+    public static function work()
+    {
+        echo "mem";
+    }
+
     public function addnews()
     {
-        echo "добавление новости";
+        $view = $this->getview('News');
+
+        $view->addnews();
     }
 
     public function editnews($params)
@@ -112,5 +122,10 @@ Class NewsController extends \Core\Controller
 
     }
 }
+function alo(){
+    Core::redirect('/404');
+}
+Ajax::getInstance()->register('add_news','alo');
+
 
 ?>

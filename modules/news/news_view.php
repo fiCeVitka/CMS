@@ -4,6 +4,7 @@ namespace modules\news;
 
 use \PDO;
 use \plugins\auth\Auth as Auth;
+use plugins\auth\Session;
 
 Class NewsView extends \core\View
 {
@@ -24,7 +25,9 @@ Class NewsView extends \core\View
 
         $this->vars('content',$this->generate('','news/news_full'));
         echo $this->generate('','template');
-        print_r(Auth::getInstance()->isAuth());
+        //Auth::getInstance();
+        print_r(Session::getInstance()->getvalue('login'));
+        var_dump(Auth::getInstance()->isAuth());
 
     }
 
@@ -64,11 +67,15 @@ Class NewsView extends \core\View
         $this->vars('title','Страница '.$page.' - Новости сайта - '.SITENAME);
         $this->vars('content',$string);
         echo $this->generate('','template');
+    }
 
-
-
-
-
+    public function addnews()
+    {
+        $string = $this->generate('','news/news_add');
+        $this->vars('title','Добавление новости');
+        $this->vars('content',$string);
+        //\core\Ajax::getInstance()->end();
+        echo $this->generate('','template');
 
     }
 

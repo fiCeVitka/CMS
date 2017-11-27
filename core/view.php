@@ -6,6 +6,12 @@ abstract Class View
 {
     protected $vars=array();
 
+    public function __construct()
+    {
+        $this->vars('cms_js','/core/template/js/ajax.js');
+        //$this->vars('cms_sidebar_1','')
+    }
+
     public function vars($varname, $value)
     {
         if (isset($this->vars[$varname]) == true) {
@@ -36,5 +42,10 @@ abstract Class View
         include 'template/'.$template_view.'.php';
         return ob_get_clean();
 
+    }
+
+    public function end()
+    {
+        \core\handler\Request::getInstance()->start();
     }
 }

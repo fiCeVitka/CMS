@@ -4,11 +4,12 @@ header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
 header('Cache-Control: no-store, no-cache, must-revalidate');
 header('Cache-Control: post-check=0, pre-check=0', FALSE);
 header('Pragma: no-cache');
-//session_start();
-
+session_start();
 
 require_once 'settings.php';
 require_once 'core/other_settings.php';
+
+require_once(ROOT . '/core/traits/singleton.php');
 
 require_once(ROOT .'/core/mysql.php');
 require_once(ROOT .'/core/core.php');
@@ -17,8 +18,11 @@ require_once (ROOT.'/core/model.php');
 require_once (ROOT.'/core/view.php');
 require_once (ROOT.'/core/paginator.php');
 require_once (ROOT.'/core/hooks.php');
+require_once (ROOT.'/core/ajax.php');
 
-require_once (ROOT.'/plugins/auth/Core.php');
+require_once (ROOT.'/core/handler/Log.php');
+
+require_once(ROOT . '/plugins/auth/Auth.php');
 require_once (ROOT.'/plugins/auth/Session.php');
 require_once (ROOT.'/plugins/auth/User.php');
 
@@ -29,6 +33,10 @@ $routes=array();
 
 require_once 'core/routing.php';
 //Запуск роутинга
+
+//\plugins\auth\Session::getInstance();
+\plugins\auth\Session::getInstance();
 $router = new \core\Router;
 $router->run();
+require_once (ROOT.'/core/handler/requesthandler.php');
 
