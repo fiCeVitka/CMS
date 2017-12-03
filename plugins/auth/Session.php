@@ -9,27 +9,23 @@ class Session
 
     private $session_start = FALSE;
 
-    private function __construct()
+
+    public function start()
     {
         if($this->session_start){
             return true;
         }
-        /*if(!session_start()){
-            throw new Exception('Error session start');
-        }*/
+        if(!session_start()){
+            throw new \Exception('Error session start');
+        }
         session_start();
         $this->session_start = true;
         return true;
     }
 
-
-    public function start()
-    {
-
-    }
-
     public function destroy()
     {
+        $this->session_start = false;
         $_SESSION = array(); //Очищаем сессию
         session_destroy();
     }
